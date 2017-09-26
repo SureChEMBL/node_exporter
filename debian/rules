@@ -8,6 +8,8 @@ export DH_GOLANG_INSTALL_EXTRA := collector/fixtures
 BUILDDIR := $(CURDIR)/build
 METAPKG := github.com/prometheus/common
 
+DEBPKGNAME := prometheus-node-exporter
+
 BRANCH     := debian/sid
 USER       := pkg-go-maintainers@lists.alioth.debian.org
 BUILD_DATE := $(shell date --utc --date='@$(SOURCE_DATE_EPOCH)' \
