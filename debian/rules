@@ -1,0 +1,69 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/pkg-info.mk
+
+export DH_VERBOSE=1
+export DH_GOPKG := github.com/prometheus/node_exporter
+export DH_GOLANG_INSTALL_EXTRA := collector/fixtures
+
+BUILDDIR := $(CURDIR)/build
+METAPKG := github.com/prometheus/common
+
+BRANCH     := debian/sid
+USER       := pkg-go-maintainers@lists.alioth.debian.org
+BUILD_DATE := $(shell date --utc --date='@$(SOURCE_DATE_EPOCH)' \
+    +%Y%m%d-%H:%M:%S)
+GO_VERSION := $(shell go version | sed 's/go version \(\S*\).*/\1/')
+GCCGO      := $(strip $(shell go version | grep gccgo))
+BUILDTAGS  :=
+BUILDFLAGS  = -tags "$(BUILDTAGS)" -ldflags \
+  " -X $(METAPKG)/version.Version=$(DEB_VERSION_UPSTREAM)\
+    -X $(METAPKG)/version.Revision=$(DEB_VERSION)\
+    -X $(METAPKG)/version.Branch=$(BRANCH)\
+    -X $(METAPKG)/version.BuildUser=$(USER)\
+    -X $(METAPKG)/version.BuildDate=$(BUILD_DATE)\
+    -X $(METAPKG)/version.GoVersion=$(GO_VERSION)"
+
+%:
+	dh $@ --buildsystem=golang --with=golang,systemd \
+            --builddirectory=$(BUILDDIR)
+
+DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH_BITS := $(shell dpkg-architecture -qDEB_HOST_ARCH_BITS)
+
+ifneq ($(GCCGO),)
+# Workaround until #872402 is fixed.
+ifeq ($(findstring mips,$(DEB_HOST_ARCH)),mips)
+# mipsel => mipsle, mips64el => mips64le
+BUILDTAGS += $(DEB_HOST_ARCH:el=le)
+endif
+# Gccgo ignores vendoring.
+override_dh_auto_configure:
+	dh_auto_configure
+	for i in github.com/beevik github.com/soundcloud; \
+        do \
+            src=$(BUILDDIR)/src/$(DH_GOPKG)/vendor/$$i; \
+            dst=`dirname $(BUILDDIR)/src/$$i`; \
+            mkdir -vp $$dst; \
+            mv -v $$src $$dst; \
+        done
+endif
+
+# ZFS (or its tests) are not working in 32-bit arches.
+ifeq ($(DEB_HOST_ARCH_BITS),32)
+BUILDTAGS += nozfs
+endif
+
+override_dh_auto_build:
+	dh_auto_build -- $(BUILDFLAGS)
+
+override_dh_auto_test:
+	chmod a+x $(BUILDDIR)/src/$(DH_GOPKG)/collector/fixtures/megacli
+	dh_auto_test -- $(BUILDFLAGS)
+
+override_dh_auto_install:
+	mkdir -p debian/$(DEBPKGNAME)/usr/bin
+	# Rename the binary to match the debian package.
+	cp -v $(BUILDDIR)/bin/node_exporter \
+            debian/$(DEBPKGNAME)/usr/bin/$(DEBPKGNAME)
+	cp -v debian/README.textfile \
+            debian/$(DEBPKGNAME)/var/lib/prometheus/node-exporter

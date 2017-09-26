@@ -1,0 +1,137 @@
+prometheus-node-exporter (0.14.0+ds-4) UNRELEASED; urgency=medium
+
+  * debian/control: Update package name for client-golang.
+  * debian/control: Update Standards-Version (no changes).
+  * debian/control: Add XS-Go-Import-Path.
+  * Replace dpkg-parsechangelog with /usr/share/dpkg/pkg-info.mk
+
+ -- Martín Ferrari <tincho@debian.org>  Tue, 29 Aug 2017 01:40:10 +0000
+
+prometheus-node-exporter (0.14.0+ds-3) unstable; urgency=medium
+
+  * Fix problem introduced by the combination of two flags (nozfs and mips*).
+  * Fix test timing issue in slow arches.
+
+ -- Martín Ferrari <tincho@debian.org>  Sat, 19 Aug 2017 11:34:09 +0000
+
+prometheus-node-exporter (0.14.0+ds-2) unstable; urgency=medium
+
+  * Add dh-systemd support. Closes: #866399.
+  * Only depend on daemon if systemd-sysv is not installed. Closes: #870083.
+  * Fix compilation on gccgo/mips*.
+  * Fix integration test (wrong path under gccgo).
+  * Disable the ZFS collector in 32-bit arches, until issue #629 is
+    solved upstream.
+
+ -- Martín Ferrari <tincho@debian.org>  Fri, 18 Aug 2017 09:36:40 +0000
+
+prometheus-node-exporter (0.14.0+ds-1) unstable; urgency=medium
+
+  * New upstream version. Closes: #867908.
+  * Updated debian/copyright for vendored dependencies.
+  * Add missing tests.
+  * Update documentation, defaults file, examples.
+  * debian/control: Update Standards-Version (no changes).
+  * debian/control: Fix Vcs-* fields.
+  * debian/control: Mark package as autopkgtest-able.
+  * debian/control: Update dependency on procfs.
+  * debian/gbp.conf: Add builder defaults.
+
+ -- Martín Ferrari <tincho@debian.org>  Wed, 12 Jul 2017 00:54:52 +0000
+
+prometheus-node-exporter (0.13.0+ds-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Work around gccgo inability to handle vendor directory.
+  * Fix build for arches not contemplated upstream.
+
+ -- Martín Ferrari <tincho@debian.org>  Sat, 14 Jan 2017 05:38:44 -0300
+
+prometheus-node-exporter (0.13.0~rc.2+ds-1) unstable; urgency=medium
+
+  [ Paul Tagliamonte ]
+  * Team upload.
+  * Use a secure transport for the Vcs-Git and Vcs-Browser URL
+
+  [ Martín Ferrari ]
+  * Actually use https for Vcs-Browser.
+  * Filter out /(sys|proc|dev|run) filesystems by default.
+  * debian/default: Add escapes in multiline variable. Closes: #840947.
+  * debian/watch: Update with latest upstream versioning fmt.
+  * New upstream release.
+  * Update available parameters.
+
+ -- Martín Ferrari <tincho@debian.org>  Sat, 19 Nov 2016 17:28:35 +0000
+
+prometheus-node-exporter (0.12.0+ds+really0.12.0-2) unstable; urgency=medium
+
+  * debian/watch: Take into account RCs and current version hack.
+  * debian/control: Update dependencies and Vcs-* links.
+  * debian/rules: Simplify with new dh_golang features; add version info.
+  * Fix default configuration.
+  * Add systemd service file.
+  * Add logrotate script.
+  * Enable the textfile collector by default.
+  * Remove rotated logs and textfile directory on purge.
+
+ -- Martín Ferrari <tincho@debian.org>  Thu, 30 Jun 2016 13:30:21 +0000
+
+prometheus-node-exporter (0.12.0+ds+really0.12.0-1) unstable; urgency=medium
+
+  * New upstream release, which is really 0.12.0. The previous version was
+    actually 0.12.0rc1, but I made a mistake, hence the weird version number
+    for this release. Closes: #814227.
+  * Stop ignoring some configuration values in initscript. Thanks to
+    contaminates@baconmail.net for the patch. Closes: #813544.
+  * Remove now unneeded patches.
+  * debian/control:
+    - Add new dependencies.
+    - Update Standards-Version with no changes.
+  * debian/rules: Fix gen-orig-tgz target.
+
+ -- Martín Ferrari <tincho@debian.org>  Fri, 06 May 2016 19:02:38 +0000
+
+prometheus-node-exporter (0.12.0+ds-2) unstable; urgency=medium
+
+  * Fix builds on arm64.
+
+ -- Martín Ferrari <tincho@debian.org>  Mon, 25 Jan 2016 16:58:35 -0300
+
+prometheus-node-exporter (0.12.0+ds-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Add new dependency on golang-github-kolo-xmlrpc-dev.
+  * Add new dependency on golang-github-prometheus-common-dev, and update
+    patches.
+
+ -- Martín Ferrari <tincho@debian.org>  Mon, 11 Jan 2016 19:29:42 +0000
+
+prometheus-node-exporter (0.11.0+ds-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Martín Ferrari <tincho@debian.org>  Thu, 03 Sep 2015 15:35:33 +0300
+
+prometheus-node-exporter (0.10.0+ds-3) unstable; urgency=medium
+
+  * debian/postrm: Do remove log and pid files.
+  * debian/init: Fix description.
+
+ -- Martín Ferrari <tincho@debian.org>  Tue, 07 Jul 2015 11:28:12 +0000
+
+prometheus-node-exporter (0.10.0+ds-2) unstable; urgency=medium
+
+  * debian/control: Update dependency name for prometheus/log.
+  * debian/postrm: Do not remove directories forcefully, as these are shared
+    with other prometheus tools.
+
+ -- Martín Ferrari <tincho@debian.org>  Tue, 07 Jul 2015 07:30:20 +0000
+
+prometheus-node-exporter (0.10.0+ds-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #790748)
+  * The source has been repackaged to include two dependencies that do not
+    deserve separate packages at this time: github.com/beevik/ntp and
+    github.com/soundcloud/go-runit.
+
+ -- Martín Ferrari <tincho@debian.org>  Mon, 06 Jul 2015 18:22:37 +0000
