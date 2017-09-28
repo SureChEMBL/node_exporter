@@ -1,3 +1,13 @@
+prometheus-node-exporter (0.14.0+ds-4surechembl2) unstable; urgency=medium
+
+  * Removed vendor files presented among Debian packages. Build using
+    system installed -dev packages.
+  * Specified version of build  dependencies for golang-dbus-dev and
+    golang-github-coreos-go-systemd-dev.
+  * Added necessary dependency on golang-golang-x-net-dev.
+
+ -- Yury Zavarin <yzavarin@ebi.ac.uk>  Thu, 28 Sep 2017 11:45:23 +0100
+
 prometheus-node-exporter (0.14.0+ds-4surechembl1) unstable; urgency=medium
 
   * Successful build of v0.14.0+ds-4.
